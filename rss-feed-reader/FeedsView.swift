@@ -6,45 +6,64 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct FeedsView: View {
     
-    @State private var feed: [String] = ["1", "2", "3", "4", "5"]
-    
-    private var feedManager = FeedManager()
+    @State private var viewModel: FeedsViewModel
+        
+    @State private var showFeedsSheet: Bool = false
     
     var body: some View {
         NavigationStack {
-            List(feed, id: \.self) { item in
+            List(viewModel.feedItems, id: \.self) { item in
                 NavigationLink(item, value: item)
+            }
+            .refreshable {
+                viewModel.fetchFeeds()
             }
             .navigationDestination(for: String.self) { item in
                 Text(item)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("Refresh")
+                    Button("Refresh") {
+                        viewModel.fetchFeeds()
+                    }
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Text("Feeds")
+                    Button("Feeds") {
+                        showFeedsSheet = true
+                    }
                 }
             }
             .navigationTitle("NeoFeed")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .onAppear {
-            Task {
-                let titles = try! await feedManager.fetchFeed(
-                    url: "https://www.xataka.com/feedburner.xml"
-                )
-                
-                print(titles)
-            }
+        .sheet(isPresented: $showFeedsSheet) {
+            FeedsSheetView(feedsViewModel: viewModel)
         }
+        .onAppear {
+            viewModel.fetchFeeds()
+        }
+    }
+    
+    init(modelContext: ModelContext) {
+        let viewModel = FeedsViewModel(modelContext: modelContext)
+        
+        _viewModel = State(initialValue: viewModel)
     }
 }
 
 #Preview {
-    FeedsView()
+    let container: ModelContainer = {
+        do {
+            return try ModelContainer(for: FeedSource.self)
+        } catch {
+            fatalError("Failed to create ModelContainer for Movie.")
+        }
+    }()
+    
+    FeedsView(modelContext: container.mainContext)
 }
