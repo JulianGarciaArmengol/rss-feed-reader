@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct FeedsView: View {
     
     @State private var feed: [String] = ["1", "2", "3", "4", "5"]
     
@@ -35,12 +35,16 @@ struct ContentView: View {
         }
         .onAppear {
             Task {
-                try! await feedManager.fetchFeed()
+                let titles = try! await feedManager.fetchFeed(
+                    url: "https://www.xataka.com/feedburner.xml"
+                )
+                
+                print(titles)
             }
         }
     }
 }
 
 #Preview {
-    ContentView()
+    FeedsView()
 }
