@@ -18,16 +18,7 @@ struct FeedsSheetView: View {
     @State private var url = ""
     
     var body: some View {
-        VStack {
-            HStack {
-                Button("Close", role: .cancel) { dismiss() }
-                    .padding()
-                Spacer()
-                Button("Add") { showingAlert = true }
-                    .padding()
-            }
-            .padding()
-            
+        NavigationStack {
             List {
                 ForEach(feedsViewModel.feedSources, id: \.self) { feedSource in
                     VStack(alignment: .leading) {
@@ -40,6 +31,17 @@ struct FeedsSheetView: View {
                     }
                 }
                 .onDelete(perform: delete)
+            }
+            .navigationTitle("Feed Sources")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close", role: .cancel) { dismiss() }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add") { showingAlert = true }
+                }
             }
         }
         .alert("New Feed", isPresented: $showingAlert) {
