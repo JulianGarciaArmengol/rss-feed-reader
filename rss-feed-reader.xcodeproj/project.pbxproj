@@ -14,9 +14,22 @@
 		6095DB212CBD7C68005AE0C2 /* rss-feed-reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rss-feed-reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		60CAD06F2CC1DD2000964E1B /* Exceptions for "rss-feed-reader" folder in "rss-feed-reader" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6095DB202CBD7C68005AE0C2 /* rss-feed-reader */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6095DB232CBD7C68005AE0C2 /* rss-feed-reader */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				60CAD06F2CC1DD2000964E1B /* Exceptions for "rss-feed-reader" folder in "rss-feed-reader" target */,
+			);
 			path = "rss-feed-reader";
 			sourceTree = "<group>";
 		};
@@ -264,6 +277,8 @@
 				DEVELOPMENT_TEAM = RZQ6PQ56VP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "rss-feed-reader/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -293,6 +308,8 @@
 				DEVELOPMENT_TEAM = RZQ6PQ56VP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "rss-feed-reader/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

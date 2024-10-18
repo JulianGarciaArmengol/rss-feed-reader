@@ -19,18 +19,9 @@ enum FeedManagerError: Error {
     case noItems
 }
 
-struct FeedItem: Identifiable, Hashable, Encodable {
-    let id: String
-    let title: String
-    let link: String
-//    let subtitle: String?
-//    let image: String?
-    let date: Date
-}
-
 class FeedManager {
     
-    func fetchFeed(url: String) async throws -> [String] {
+    func fetchFeed(url: String, from source: String) async throws -> [FeedItem] {
         let trimmedUrl = url.trimmingCharacters(in: .whitespaces)
 
         guard let feedURL = URL(string: trimmedUrl) else {
@@ -52,9 +43,11 @@ class FeedManager {
                             return
                         }
                         
-                        let entriesTitles = entries.compactMap(\.title)
+                        let feedItems = entries.compactMap { entry in
+                            FeedItem(entry, from: source)
+                        }
                         
-                        continuation.resume(returning: entriesTitles)
+                        continuation.resume(returning: feedItems)
                         
                     } else if let feed = feed.jsonFeed {
                         print("json feed")
@@ -64,9 +57,11 @@ class FeedManager {
                             return
                         }
                         
-                        let itemsTitles = items.compactMap(\.title)
+                        let feedItems = items.compactMap { item in
+                            FeedItem(item, from: source)
+                        }
                         
-                        continuation.resume(returning: itemsTitles)
+                        continuation.resume(returning: feedItems)
                         
                     } else if let feed = feed.rssFeed {
                         print("rss feed")
@@ -76,9 +71,11 @@ class FeedManager {
                             return
                         }
                         
-                        let itemsTitles = items.compactMap(\.title)
+                        let feedItems = items.compactMap { item in
+                            FeedItem(item, from: source)
+                        }
                         
-                        continuation.resume(returning: itemsTitles)
+                        continuation.resume(returning: feedItems)
                     } else {
                         continuation.resume(throwing: FeedManagerError.invalidFeed)
                     }

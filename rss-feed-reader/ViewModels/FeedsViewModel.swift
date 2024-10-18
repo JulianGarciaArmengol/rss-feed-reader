@@ -14,7 +14,7 @@ final class FeedsViewModel {
     private var modelContext: ModelContext
     
     var feedSources = [FeedSource]()
-    var feedItems = [String]()
+    var feedItems = [FeedItem]()
     
     init(
         feedManager: FeedManager = FeedManager(),
@@ -29,11 +29,14 @@ final class FeedsViewModel {
     func fetchFeeds() {
         Task(priority: .userInitiated) {
             
-            var allItems = [String]()
+            var allItems = [FeedItem]()
             
             for feedSource in feedSources {
                 do {
-                    let feed = try await feedManager.fetchFeed(url: feedSource.url)
+                    let feed = try await feedManager.fetchFeed(
+                        url: feedSource.url,
+                        from: feedSource.name
+                    )
                     
                     allItems.append(contentsOf: feed)
                 } catch {
@@ -41,9 +44,11 @@ final class FeedsViewModel {
                 }
             }
             
+            allItems.sort(by: {
+                $0.date.compare($1.date) == .orderedDescending
+            })
+            
             await MainActor.run { [allItems] in
-                // TODO: sort by date
-                
                 self.feedItems = allItems
             }
         }
@@ -61,6 +66,12 @@ final class FeedsViewModel {
     func addFeedSource(name: String, url: String) {
         let feedSource = FeedSource(name: name, url: url)
         modelContext.insert(feedSource)
+        
+        do {
+            try modelContext.save()
+        } catch {
+            print("error saving context: \(error.localizedDescription)")
+        }
         
         fetchFeedSources()
     }

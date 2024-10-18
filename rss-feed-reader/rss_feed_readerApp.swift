@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+
+
 @main
 struct rss_feed_readerApp: App {
     var sharedModelContainer: ModelContainer = {
@@ -23,10 +25,14 @@ struct rss_feed_readerApp: App {
         }
     }()
     
+    @StateObject var userPreferences = UserPreferences()
+    
     var body: some Scene {
         WindowGroup {
             FeedsView(modelContext: sharedModelContainer.mainContext)
+                .preferredColorScheme(userPreferences.colorScheme)
         }
+        .environmentObject(userPreferences)
         .modelContainer(sharedModelContainer)
     }
 }
